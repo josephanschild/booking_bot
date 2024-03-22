@@ -108,8 +108,9 @@ wait(5)
 
 
 
-radio_button = driver.find_element(By.NAME, "radRezSelect54")
+radio_button = driver.find_element(By.XPATH, "//*[@id='radRezSelect54']")
 radio_button.click()
+wai(2)
 
 
 login_button = driver.find_element(By.ID, "divSearchClient")
