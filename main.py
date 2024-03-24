@@ -3,18 +3,18 @@ from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.support.ui import Select  # This is the missing import
 import csv
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+
 
 username = "jhanc67"
 password = "Hanchiew12"
 
 
-guest_name = "committ"
-business_name = "BM Alliance Operation Pty Ltd"
-alt_con = "assigned room"
-check_in_date = "20-APR-2024"
-check_out_date = "21-APR-2024"
+
+#PO and Account Detail
+PO_number = "4514867738"
+account_id = "71590" #general PO
+group_rate = "2.BMA 2023-24 HOLD ROOM"
+
 
 driver = webdriver.Chrome()
 driver.maximize_window()
@@ -23,134 +23,206 @@ driver.get("https://online.rezexpert.com/")
 def wait(int):
 	return time.sleep(int)
 
-wait(2)  # Consider using WebDriverWait here instead
+wait(5)  # Consider using WebDriverWait here instead
 
 username_field = driver.find_element(By.ID, "txtUserName")
 username_field.send_keys(username)
 
-wait(2)  # Consider using WebDriverWait here instead
+wait(0.5)  # Consider using WebDriverWait here instead
 
 password_field = driver.find_element(By.ID, "txtPassword")  # Adjust based on actual ID
 password_field.send_keys(password)
-wait(2)  # Consider using WebDriverWait here instead
+wait(0.5)  # Consider using WebDriverWait here instead
 
 # Using XPath by button text
 login_button = driver.find_element(By.XPATH, "//button[contains(text(), 'LOGIN')]")
 login_button.click()
-wait(10)  # Consider using WebDriverWait here instead
-
-
-# Using XPath by button text
-login_button = driver.find_element(By.ID, "grid_clientsearch0")
-login_button.click()
-wait(5)  # Consider using WebDriverWait here instead
+wait(8)  # Consider using WebDriverWait here instead
 
 # Using XPath by button text
-login_button = driver.find_element(By.XPATH, "//li[a[text()='Business']]")
+login_button = driver.find_element(By.XPATH, "//*[@id='mnuAdmin']/a")
 login_button.click()
-wait(5)  # Consider using WebDriverWait here instead
-
-# Using XPath by button text
-login_button = driver.find_element(By.ID, "txtBus_personsearch_Name1")
-login_button.click()
-login_button.send_keys(business_name)
-
-wait(10)  # Consider using WebDriverWait here instead
-
-login_button = driver.find_element(By.ID, "btnSearch1")
-login_button.click()
-wait(2)
-
-login_button = driver.find_element(By.XPATH, "//*[@id='divMainResults1']/div[2]/div[2]")
-login_button.click()
-wait(2)
-
-login_button = driver.find_element(By.XPATH, "//*[@id='divMainResults1']")
-login_button.click()
-wait(2)
-
-# Using XPath by button text
-row_element = driver.find_element(By.XPATH, "//*[@id='tblResults1']/tbody/tr[2]")
-row_element.click()
-
-wait(10)  # Consider using WebDriverWait here instead
-
-# Using XPath by button text
-login_button = driver.find_element(By.ID, "btnSNSubmit0")
-login_button.click()
-wait(10)  # Consider using WebDriverWait here instead
-
-# Using XPath by button text
-login_button = driver.find_element(By.ID, "txtCheckInDate99")
-login_button.clear()
-login_button.send_keys(check_in_date)
-
 wait(2)  # Consider using WebDriverWait here instead
 
 # Using XPath by button text
-login_button = driver.find_element(By.ID, "txtCheckOutDate99")
-login_button.clear()
-wait(0.5)
-login_button.send_keys(check_out_date)
-
-wait(5)  # Consider using WebDriverWait here instead
-
-
-print("assigne room type")
-
-wait(5)
-
-
-
-login_button = driver.find_element(By.ID, "btnSubmit99")
+login_button = driver.find_element(By.XPATH, "//*[@id='tbAdmin_Periodic_Billing']/tr[1]/td[2]")
 login_button.click()
-wait(5)
+wait(6)  # Consider using WebDriverWait here instead
 
-
-
-radio_button = driver.find_element(By.XPATH, "//*[@id='radRezSelect54']")
-radio_button.click()
-wai(2)
-
-
-login_button = driver.find_element(By.ID, "divSearchClient")
+# Using XPath by button text
+login_button = driver.find_element(By.XPATH, "//*[@id='tbActiveBillingPolicies']/tr[1]")
 login_button.click()
-wait(5)  # Consider using WebDriverWait here instead
+wait(1)  # Consider using WebDriverWait here instead
 
-
-login_button = driver.find_element(By.ID, "txtPer_personsearch_ClientName1")
+# Using XPath by button text
+login_button = driver.find_element(By.XPATH, "//*[@id='btnCancel0']")
 login_button.click()
-login_button.send_keys(guest_name)
-wait(5)  # Consider using WebDriverWait here instead
+wait(8)  # Consider using WebDriverWait here instead
+
+
+# Open and read the CSV file
+with open('billing_to_add.csv', newline='') as csvfile:
+	csvreader = csv.DictReader(csvfile)
+
+	for row in csvreader:
+		# For each row in the CSV, extract data
+		unit_number = row['unit label']
+		rez_number = row['rez number']
+		start_date = row['check in date']
+		end_date = row['check out date']
 
 
 
-login_button = driver.find_element(By.ID, "btnSearch1")
-login_button.click()
-wait(5)  # Consider using WebDriverWait here instead
+		# Using XPath by button text
+		login_button = driver.find_element(By.XPATH, "//*[@id='btnAdd782']")
+		login_button.click()
+		wait(3)  # Consider using WebDriverWait here instead
+
+		# Using XPath by button text
+		login_button = driver.find_element(By.XPATH, "//*[@id='divUnitLabel']")
+		login_button.click()
+		wait(0.5)  # Consider using WebDriverWait here instead
+
+		# Using XPath by button text
+		login_button = driver.find_element(By.XPATH, "//*[@id='59501']/i")
+		login_button.click()
+		wait(0.5)  # Consider using WebDriverWait here instead
+
+		# Using XPath by button text
+		login_button = driver.find_element(By.XPATH, "//*[@id='59502']/i")
+		login_button.click()
+		wait(0.5)  # Consider using WebDriverWait here instead
+
+		# Using XPath by button text
+		login_button = driver.find_element(By.XPATH, "//*[@id='59503']/i")
+		login_button.click()
+		wait(0.5)  # Consider using WebDriverWait here instead
+
+		# Using XPath by button text
+		login_button = driver.find_element(By.XPATH, "//*[@id='59504']/i")
+		login_button.click()
+		wait(0.5)  # Consider using WebDriverWait here instead
+
+		# Using XPath by button text
+		login_button = driver.find_element(By.XPATH, "//*[@id='59505']/i")
+		login_button.click()
+		wait(0.5)  # Consider using WebDriverWait here instead
+
+		# Using XPath by button text
+		login_button = driver.find_element(By.XPATH, "//*[@id='59506']/i")
+		login_button.click()
+		wait(1)  # Consider using WebDriverWait here instead
+
+		select_unit = driver.find_element(By.XPATH, f"//li[@label='{unit_number}']")
+		select_unit.click()
+		wait(1) 
 
 
-login_button = driver.find_element(By.ID, "txtGuestFolioAltConfirmationNumber")
-login_button.click()
-login_button.send_keys(alt_con)
-wait(5)  # Consider using WebDriverWait here instead
+		select_unit = driver.find_element(By.XPATH, "//*[@id='divUnitSelected']")
+		select_unit.click()
+		wait(1) 
 
-# Locate the select element
-select_element = driver.find_element(By.ID, "cboGuestFolioAlert")
-select_object = Select(select_element)
-select_object.select_by_value("4926")
+		select_unit = driver.find_element(By.XPATH, "//*[@id='divRezNumber']")
+		select_unit.click()
+		wait(2) 
 
 
-login_button = driver.find_element(By.ID, "setuppage_submit3")
-login_button.click()
-wait(5)  # Consider using WebDriverWait here instead
+		radio_button = driver.find_element(By.XPATH, f"//input[@class='radRezList'][@rez_number='{rez_number}']")
+		radio_button.click()
+		wait(1) 
 
 
-login_button = driver.find_element(By.XPATH, "//*[@id='the_body']/div[9]/div[1]/button")
-login_button.click()
-wait(5)  # Consider using WebDriverWait here instead
+		select_unit = driver.find_element(By.XPATH, "//*[@id='divRezSelected']")
+		select_unit.click()
+		wait(1) 
 
-login_button = driver.find_element(By.XPATH, "//*[@id='dashboard_body_head_funcs']/div[2]/div")
-login_button.click()
-wait(5)  # Consider using WebDriverWait here instead
 
+
+		js_script = f"document.getElementById('txtStartDate').value = '{start_date}';"
+		driver.execute_script(js_script)
+		driver.execute_script("var evt = document.createEvent('HTMLEvents'); evt.initEvent('change', true, true); document.getElementById('txtStartDate').dispatchEvent(evt);")
+		wait(1)  # Consider using WebDriverWait here instead
+
+		js_script = f"document.getElementById('txtEndDate').value = '{end_date}';"
+		driver.execute_script(js_script)
+		driver.execute_script("var evt = document.createEvent('HTMLEvents'); evt.initEvent('change', true, true); document.getElementById('txtEndDate').dispatchEvent(evt);")
+
+		wait(1)  # Consider using WebDriverWait here instead
+
+		js_script = f"document.getElementById('txtNextInvoiceDate').value = '{start_date}';"
+		driver.execute_script(js_script)
+		driver.execute_script("var evt = document.createEvent('HTMLEvents'); evt.initEvent('change', true, true); document.getElementById('txtNextInvoiceDate').dispatchEvent(evt);")
+
+		wait(0.5)  # Consider using WebDriverWait here instead
+
+
+		select_unit = driver.find_element(By.XPATH, "//*[@id='divRight']/div[1]/div[3]/table/thead/tr/th[2]")
+		select_unit.click()
+		wait(0.5) 
+
+		select_unit = driver.find_element(By.XPATH, "//*[@id='divAccount']")
+		select_unit.click()
+		wait(1) 
+
+		radio_button = driver.find_element(By.XPATH, f"//input[@class='radAccountList'][@account_id='{account_id}']")
+		radio_button.click()
+		wait(2) 
+
+
+		select_unit = driver.find_element(By.ID, "btnAccountSelect")
+		select_unit.click()
+		wait(1) 
+
+		password_field = driver.find_element(By.ID, "txtPONumber")  # Adjust based on actual ID
+		password_field.send_keys(PO_number)
+		wait(2)  # Consider using WebDriverWait here instead
+
+
+		select_unit = driver.find_element(By.ID, "divAdd")
+		select_unit.click()
+		wait(1) 
+
+
+		dropdown = Select(driver.find_element(By.ID, "cboProductGroup"))
+		dropdown.select_by_visible_text("Reservation Products")
+		wait(1) 
+
+		dropdown = Select(driver.find_element(By.ID, "cboProduct"))
+		dropdown.select_by_visible_text("Terrace")
+		wait(1) 
+
+
+		dropdown = Select(driver.find_element(By.ID, "cboRateType"))
+		dropdown.select_by_visible_text("Pull from Product Rates")
+		wait(1) 
+
+
+		dropdown = Select(driver.find_element(By.ID, "cboProductRateGroup"))
+		dropdown.select_by_visible_text(group_rate)
+		wait(1) 
+
+		select_unit = driver.find_element(By.XPATH, "//*[@id='divProductSetup']/div[2]")
+		select_unit.click()
+		wait(1) 
+
+		select_unit = driver.find_element(By.ID, "btnSubmit782")
+		select_unit.click()
+		wait(2) 
+
+		select_unit = driver.find_element(By.ID, "spanBillingStatus")
+		select_unit.click()
+		wait(1) 
+
+		select_unit = driver.find_element(By.ID, "btnYes")
+		select_unit.click()
+		wait(1) 
+
+
+
+	# Consider implementing a wait here to ensure the next page loads or your action completes
+
+	# Proceed with further actions or close the browser
+	# driver.quit()
+	# Adjust time.sleep as needed, or implement more sophisticated wait strategies
+
+	# Your script continues from here
