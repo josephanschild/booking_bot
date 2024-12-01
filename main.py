@@ -3,17 +3,31 @@ from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.support.ui import Select  # This is the missing import
 import csv
+from selenium.webdriver.common.keys import Keys
+
 
 
 username = "jhanc67"
-password = "Hanchiew12"
+password = "Hanchiew21"
 
-
-
+#WHC
+billing_number = 1
 #PO and Account Detail
-PO_number = "4514867738"
-account_id = "71590" #general PO
+PO_number = "4500035244"
+account_id = "82499" #general PO
 group_rate = "2.BMA 2023-24 HOLD ROOM"
+policy_type = "//*[@id='cboBillPolicyType']/option[3]"
+
+
+"""
+#Yarrabee
+billing_number = 1
+#PO and Account Detail
+PO_number = "YARRABEE"
+account_id = "10183" #general PO
+group_rate = "Yarrabee FY 2024-2025"
+policy_type = "//*[@id='cboBillPolicyType']/option[4]"
+"""
 
 
 driver = webdriver.Chrome()
@@ -23,12 +37,10 @@ driver.get("https://online.rezexpert.com/")
 def wait(int):
 	return time.sleep(int)
 
-wait(5)  # Consider using WebDriverWait here instead
+wait(2)  # Consider using WebDriverWait here instead
 
 username_field = driver.find_element(By.ID, "txtUserName")
 username_field.send_keys(username)
-
-wait(0.5)  # Consider using WebDriverWait here instead
 
 password_field = driver.find_element(By.ID, "txtPassword")  # Adjust based on actual ID
 password_field.send_keys(password)
@@ -37,7 +49,7 @@ wait(0.5)  # Consider using WebDriverWait here instead
 # Using XPath by button text
 login_button = driver.find_element(By.XPATH, "//button[contains(text(), 'LOGIN')]")
 login_button.click()
-wait(8)  # Consider using WebDriverWait here instead
+wait(10)  # Consider using WebDriverWait here instead
 
 # Using XPath by button text
 login_button = driver.find_element(By.XPATH, "//*[@id='mnuAdmin']/a")
@@ -47,17 +59,28 @@ wait(2)  # Consider using WebDriverWait here instead
 # Using XPath by button text
 login_button = driver.find_element(By.XPATH, "//*[@id='tbAdmin_Periodic_Billing']/tr[1]/td[2]")
 login_button.click()
-wait(6)  # Consider using WebDriverWait here instead
+wait(10)  # Consider using WebDriverWait here instead
+
+billing_type = driver.find_element(By.XPATH, "//*[@id='cboBillPolicyType']")  # Adjust based on actual ID
+billing_type.click()
+wait(0.5)  # Consider using WebDriverWait here instead
+
+billing_type = driver.find_element(By.XPATH, f"{policy_type}")  # Adjust based on actual ID
+billing_type.click()
+wait(10)  # Consider using WebDriverWait here instead
+
 
 # Using XPath by button text
 login_button = driver.find_element(By.XPATH, "//*[@id='tbActiveBillingPolicies']/tr[1]")
 login_button.click()
-wait(1)  # Consider using WebDriverWait here instead
+wait(5)  # Consider using WebDriverWait here instead
+
+
 
 # Using XPath by button text
 login_button = driver.find_element(By.XPATH, "//*[@id='btnCancel0']")
 login_button.click()
-wait(8)  # Consider using WebDriverWait here instead
+wait(25)  # Consider using WebDriverWait here instead
 
 
 # Open and read the CSV file
@@ -72,7 +95,6 @@ with open('billing_to_add.csv', newline='') as csvfile:
 		end_date = row['check out date']
 
 
-
 		# Using XPath by button text
 		login_button = driver.find_element(By.XPATH, "//*[@id='btnAdd782']")
 		login_button.click()
@@ -81,7 +103,7 @@ with open('billing_to_add.csv', newline='') as csvfile:
 		# Using XPath by button text
 		login_button = driver.find_element(By.XPATH, "//*[@id='divUnitLabel']")
 		login_button.click()
-		wait(0.5)  # Consider using WebDriverWait here instead
+		wait(2)  # Consider using WebDriverWait here instead
 
 		# Using XPath by button text
 		login_button = driver.find_element(By.XPATH, "//*[@id='59501']/i")
@@ -120,7 +142,7 @@ with open('billing_to_add.csv', newline='') as csvfile:
 
 		select_unit = driver.find_element(By.XPATH, "//*[@id='divUnitSelected']")
 		select_unit.click()
-		wait(1) 
+		wait(3) 
 
 		select_unit = driver.find_element(By.XPATH, "//*[@id='divRezNumber']")
 		select_unit.click()
@@ -136,33 +158,24 @@ with open('billing_to_add.csv', newline='') as csvfile:
 		select_unit.click()
 		wait(1) 
 
+		password_field = driver.find_element(By.ID, "txtStartDate")  # Adjust based on actual ID
+		password_field.send_keys(start_date)						
+
+		password_field = driver.find_element(By.ID, "txtEndDate")  # Adjust based on actual ID
+		password_field.send_keys(end_date)
 
 
-		js_script = f"document.getElementById('txtStartDate').value = '{start_date}';"
-		driver.execute_script(js_script)
-		driver.execute_script("var evt = document.createEvent('HTMLEvents'); evt.initEvent('change', true, true); document.getElementById('txtStartDate').dispatchEvent(evt);")
-		wait(1)  # Consider using WebDriverWait here instead
-
-		js_script = f"document.getElementById('txtEndDate').value = '{end_date}';"
-		driver.execute_script(js_script)
-		driver.execute_script("var evt = document.createEvent('HTMLEvents'); evt.initEvent('change', true, true); document.getElementById('txtEndDate').dispatchEvent(evt);")
-
-		wait(1)  # Consider using WebDriverWait here instead
-
-		js_script = f"document.getElementById('txtNextInvoiceDate').value = '{start_date}';"
-		driver.execute_script(js_script)
-		driver.execute_script("var evt = document.createEvent('HTMLEvents'); evt.initEvent('change', true, true); document.getElementById('txtNextInvoiceDate').dispatchEvent(evt);")
-
-		wait(0.5)  # Consider using WebDriverWait here instead
+		password_field = driver.find_element(By.ID, "txtNextInvoiceDate")  # Adjust based on actual ID
+		password_field.send_keys(start_date)
 
 
 		select_unit = driver.find_element(By.XPATH, "//*[@id='divRight']/div[1]/div[3]/table/thead/tr/th[2]")
 		select_unit.click()
-		wait(0.5) 
+		wait(1) 
 
 		select_unit = driver.find_element(By.XPATH, "//*[@id='divAccount']")
 		select_unit.click()
-		wait(1) 
+		wait(2) 
 
 		radio_button = driver.find_element(By.XPATH, f"//input[@class='radAccountList'][@account_id='{account_id}']")
 		radio_button.click()
@@ -185,7 +198,7 @@ with open('billing_to_add.csv', newline='') as csvfile:
 
 		dropdown = Select(driver.find_element(By.ID, "cboProductGroup"))
 		dropdown.select_by_visible_text("Reservation Products")
-		wait(1) 
+		wait(0.5) 
 
 		dropdown = Select(driver.find_element(By.ID, "cboProduct"))
 		dropdown.select_by_visible_text("Terrace")
@@ -194,7 +207,7 @@ with open('billing_to_add.csv', newline='') as csvfile:
 
 		dropdown = Select(driver.find_element(By.ID, "cboRateType"))
 		dropdown.select_by_visible_text("Pull from Product Rates")
-		wait(1) 
+		wait(0.5) 
 
 
 		dropdown = Select(driver.find_element(By.ID, "cboProductRateGroup"))
@@ -207,17 +220,21 @@ with open('billing_to_add.csv', newline='') as csvfile:
 
 		select_unit = driver.find_element(By.ID, "btnSubmit782")
 		select_unit.click()
-		wait(2) 
+		wait(3) 
 
 		select_unit = driver.find_element(By.ID, "spanBillingStatus")
 		select_unit.click()
-		wait(1) 
+		wait(2) 
 
 		select_unit = driver.find_element(By.ID, "btnYes")
 		select_unit.click()
-		wait(1) 
+		wait(2) 
 
+		billing_number += 1
 
+		print(f"{billing_number}, {unit_number}, {rez_number}, {start_date}, {end_date}")
+
+print("DONE")
 
 	# Consider implementing a wait here to ensure the next page loads or your action completes
 
